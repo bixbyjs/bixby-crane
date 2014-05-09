@@ -1,7 +1,7 @@
 {
   "name": "bixby-crane",
   "version": "0.0.0",
-  "description": "TODO: No description specified",
+  "description": "Crane components for the Bixby framework.",
   "keywords": [
     "crane",
     "mq",
