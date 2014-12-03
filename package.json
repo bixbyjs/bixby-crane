@@ -1,7 +1,7 @@
 {
   "name": "bixby-crane",
   "version": "0.0.0",
-  "description": "Bixby components for applications using Crane.",
+  "description": "Message queue components of the Bixby framework.",
   "keywords": [
     "crane",
     "mq",
