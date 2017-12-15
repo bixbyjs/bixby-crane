@@ -25,7 +25,9 @@
       "url": "http://www.opensource.org/licenses/MIT"
     }
   ],
-  "main": "./lib",
+  "main": "./app",
+  "assembly": {
+  },
   "dependencies": {
     "bootable": "~0.2.4"
   },
