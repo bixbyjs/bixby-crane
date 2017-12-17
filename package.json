@@ -29,7 +29,8 @@
   "assembly": {
   },
   "dependencies": {
-    "bootable": "~0.2.4"
+    "bootable": "~0.2.4",
+    "fluidfactory": "^0.1.0"
   },
   "optionalDependencies": {
     "crane-amqp": "~0.1.1"
