@@ -1,11 +1,11 @@
 exports = module.exports = function(IoC, env) {
-  var Factory = require('fluidfactory');
+  var Settings = require('../lib/settings');
   
   
-  var factory = new Factory();
-  factory.use(env);
+  var settings = new Settings();
+  settings.use(env);
   
-  return factory.create();
+  return settings;
 }
 
 exports['@require'] = [
