@@ -7,6 +7,10 @@ exports = module.exports = function(IoC, configuration, MS, logger) {
           var conn = MS.createConnection(config);
           conn.on('message', app);
           
+          conn.on('error', function(err) {
+            console.log(err);
+          });
+          
           return conn;
         })
         .then(function waitUntilReady(conn) {
@@ -20,21 +24,31 @@ exports = module.exports = function(IoC, configuration, MS, logger) {
             // TODO: reject on error.
           });
         })
+        /*
+        .then(function declareMaybe(conn) {
+          return new Promise(function(resolve, reject){
+            conn.declare('fetch', function(err)  {
+              console.log('DECLARED!');
+              console.log(err);
+          
+              if (err) { return reject(err); }
+              return resolve(conn);
+            })
+          });
+        })*/
         .then(function subscribe(conn) {
           return new Promise(function(resolve, reject) {
-            
             conn.subscribe('fetch', function(err) {
               console.log('SUBSCRIBED?')
               console.log(err);
-        
+              
               // err: NoQueueError: Queue "fetch" not declared
+              // occurs if attempt to subscribe, and the queue does not exist
+              
+              if (err) { return reject(err); }
+              return resolve(conn);
             });
-      
-            // TODO: reject on error.
           });
-          
-          
-          
         })
         .then(function() {
           return app;
@@ -42,44 +56,6 @@ exports = module.exports = function(IoC, configuration, MS, logger) {
     })
     .then(function(app) {
       return;
-    });
-  
-  
-  return IoC.create('http://i.bixbyjs.org/ms/Application')
-    .then(function(app) {
-      return Promise.resolve(IoC.create('./config'))
-        .then(function(config) {
-          var conn = MS.createConnection(config);
-          // TODO: Add the connection to the agent?
-          
-          conn.on('message', app);
-          
-          
-          conn.on('error', function(err) {
-            console.log(err);
-          });
-          
-          return conn;
-        });
-    })
-    .then(function(conn) {
-      return new Promise(function(resolve, reject){
-        conn.declare('fetch', function(err)  {
-          console.log('DECLARED!');
-          console.log(err);
-          
-          
-        })
-      });
-    })
-    .then(function(conn) {
-      // TODO: Get subscription topics/queues automatically...
-      conn.subscribe('fetch', function(err) {
-        console.log('SUBSCRIBED?')
-        console.log(err);
-        
-        // err: NoQueueError: Queue "fetch" not declared
-      });
     });
 };
 
