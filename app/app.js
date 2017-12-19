@@ -4,51 +4,57 @@ exports = module.exports = function(IoC, configuration, MS, logger) {
     .then(function(app) {
       return configuration.get()
         .then(function createConnection(config) {
-          var conn = MS.createConnection(config);
+          var conn = MS.createConnection(config)
+            , queue;
           conn.on('message', app);
           
           conn.on('error', function(err) {
             console.log(err);
           });
           
-          return conn;
-        })
-        .then(function waitUntilReady(conn) {
-          return new Promise(function(resolve, reject) {
-            
-            conn.once('ready', function() {
-              resolve(conn);
-              // TODO: Remove error listener
-            });
-      
-            // TODO: reject on error.
-          });
-        })
-        /*
-        .then(function declareMaybe(conn) {
-          return new Promise(function(resolve, reject){
-            conn.declare('fetch', function(err)  {
-              console.log('DECLARED!');
-              console.log(err);
+          if (!config.queue) {
+            queue = MS.parseQueue(config.url);
+          }
           
-              if (err) { return reject(err); }
-              return resolve(conn);
+          
+          
+          return Promise.resolve(conn)
+            .then(function waitUntilReady(conn) {
+              return new Promise(function(resolve, reject) {
+            
+                conn.once('ready', function() {
+                  resolve(conn);
+                  // TODO: Remove error listener
+                });
+      
+                // TODO: reject on error.
+              });
             })
-          });
-        })*/
-        .then(function subscribe(conn) {
-          return new Promise(function(resolve, reject) {
-            conn.subscribe('fetch', function(err) {
-              console.log('SUBSCRIBED?')
-              console.log(err);
+            .then(function declareMaybe(conn) {
+              return new Promise(function(resolve, reject){
+                conn.declare(queue, function(err)  {
+                  console.log('DECLARED!');
+                  console.log(err);
+          
+                  if (err) { return reject(err); }
+                  return resolve(conn);
+                })
+              });
+            })
+            .then(function subscribe(conn) {
+              return new Promise(function(resolve, reject) {
+                conn.subscribe(queue, function(err) {
+                  console.log('SUBSCRIBED?')
+                  console.log(err);
               
-              // err: NoQueueError: Queue "fetch" not declared
-              // occurs if attempt to subscribe, and the queue does not exist
+                  // err: NoQueueError: Queue "fetch" not declared
+                  // occurs if attempt to subscribe, and the queue does not exist
               
-              if (err) { return reject(err); }
-              return resolve(conn);
-            });
-          });
+                  if (err) { return reject(err); }
+                  return resolve(conn);
+                });
+              });
+            })
         })
         .then(function() {
           return app;
