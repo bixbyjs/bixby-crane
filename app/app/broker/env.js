@@ -5,14 +5,8 @@ exports = module.exports = function(ms, logger) {
   
   
   return function() {
-    console.log('CHECK ENV BROKER?');
-    return;
-    
     var url = process.env['BROKER_URL'];
     if (!url) { return; }
-    
-    console.log('CONNECT TO BROKER?');
-    
     
     broker = ms.createConnection(url);
     //console.log(broker);

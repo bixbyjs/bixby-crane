@@ -1,7 +1,5 @@
 exports = module.exports = function(IoC, service, configuration, MS, logger) {
   
-  console.log('bixby-crane main');
-  
   IoC.create('./app/broker')
     .then(function(broker) {
       broker.on('message', service);
@@ -20,8 +18,8 @@ exports = module.exports = function(IoC, service, configuration, MS, logger) {
     
     })
     .catch(function(err) {
-      console.log('BROKER ERROR &**&&&&');
-      console.log(err);
+      logger.error(err.stack);
+      process.exit(-1);
     });
   
   
