@@ -1,4 +1,32 @@
-exports = module.exports = function(IoC, configuration, MS, logger) {
+exports = module.exports = function(IoC, service, configuration, MS, logger) {
+  
+  console.log('bixby-crane main');
+  
+  IoC.create('./app/broker')
+    .then(function(broker) {
+      console.log('GOT BROKER?');
+      //console.log(broker)
+    
+      broker.on('message', service);
+      
+      //console.log(service);
+      
+      /*
+      broker.on('message', function(msg) {
+        
+        console.log('MESSAGE!');
+        //console.log(msg);
+        console.log(msg.topic)
+        
+      });
+      */
+    
+    });
+  
+  
+  return;
+  
+  // FIXME: cleanup below here
   
   return IoC.create('http://i.bixbyjs.org/ms/Application')
     .then(function(app) {
@@ -66,8 +94,10 @@ exports = module.exports = function(IoC, configuration, MS, logger) {
 };
 
 exports['@singleton'] = true;
+exports['@implements'] = 'http://i.bixbyjs.org/Main';
 exports['@require'] = [
   '!container',
+  './app/service',
   './config',
   'http://i.bixbyjs.org/ms',
   'http://i.bixbyjs.org/Logger'

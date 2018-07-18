@@ -27,9 +27,15 @@
   ],
   "main": "./app",
   "assembly": {
+    "namespace": "ms",
+    "components": [
+      "app"
+    ]
   },
   "dependencies": {
-    "bootable": "~0.2.4"
+    "bootable": "~0.2.4",
+    "crane": "^0.2.0",
+    "fluidfactory": "^0.1.0"
   },
   "optionalDependencies": {
     "crane-amqp": "~0.1.1"
