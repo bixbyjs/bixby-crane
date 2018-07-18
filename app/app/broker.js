@@ -1,8 +1,9 @@
-exports = module.exports = function(IoC, logger) {
+exports = module.exports = function(IoC, env, logger) {
   var Factory = require('fluidfactory');
   
   
   var factory = new Factory();
+  factory.use(env);
   
   return Promise.resolve(factory)
     .then(function(factory) {
@@ -25,5 +26,6 @@ exports = module.exports = function(IoC, logger) {
 
 exports['@require'] = [
   '!container',
+  './broker/env',
   'http://i.bixbyjs.org/Logger'
 ];

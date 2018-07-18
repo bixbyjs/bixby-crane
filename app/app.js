@@ -4,9 +4,6 @@ exports = module.exports = function(IoC, service, configuration, MS, logger) {
   
   IoC.create('./app/broker')
     .then(function(broker) {
-      console.log('GOT BROKER?');
-      //console.log(broker)
-    
       broker.on('message', service);
       
       //console.log(service);
@@ -21,6 +18,10 @@ exports = module.exports = function(IoC, service, configuration, MS, logger) {
       });
       */
     
+    })
+    .catch(function(err) {
+      console.log('BROKER ERROR &**&&&&');
+      console.log(err);
     });
   
   
