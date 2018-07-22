@@ -11,6 +11,35 @@ exports = module.exports = function(ms, logger) {
     broker = ms.createConnection(url);
     //console.log(broker);
     
+    broker.on('ready', function() {
+      console.log('READY!');
+      
+      
+      //broker.declare('foo', function(err) {
+      //  if (err) {
+      //    logger.error(err.stack);
+      //    return
+      //  }
+        
+        
+        console.log('DECLARED....');
+        
+        broker.consume('foo', function(err) {
+          if (err) {
+            logger.error('Failed to consume message queue')
+            logger.error(err.stack);
+          }
+        
+          console.log('SUBSCRIBED!');
+        });
+      //})
+      
+      
+    });
+    
+    
+    return broker;
+    
     /*
     broker.on('ready', function() {
       broker.consume('my-sub-linkback', function(err) {
